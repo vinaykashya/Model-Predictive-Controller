@@ -23,6 +23,9 @@ A kinematic model is implemented to control the vehicle around the track. Kinema
   * δ (delta): steering angle
   * a : acceleration (including throttle and break)
 
+*The kinematic model can predict the state on the next time step by taking into account the current state and actuators as follows:
+ ![imgs/download](https://github.com/vinaykashya/Model-Predictive-Controller/blob/master/imgs/download.png)
+
 
 ---
 ## Dependencies
