@@ -8,7 +8,7 @@ This project is to use Model Predictive Control (MPC) to drive a car in the Udac
 
 ##  MODEL
 
-* **KINEMATIC MODEL**
+* **Kinematic Model**
   A kinematic model is implemented to control the vehicle around the track. Kinematic models are simplifications of dynamic models that ignore tire forces, gravity, and mass. This simplification reduces the accuracy of the models, but it also makes them more tractable. The kinematic model includes the vehicle's x and y coordinates, orientation angle (psi), and velocity, as well as the cross-track error and psi error (epsi). Actuator outputs are acceleration and delta (steering angle). The model combines the state and actuations from the previous timestep to calculate the state for the current timestep.
 
   * States:
@@ -26,7 +26,7 @@ This project is to use Model Predictive Control (MPC) to drive a car in the Udac
   * The kinematic model can predict the state on the next time step by taking into account the current state and actuators:
 		![imgs/download](https://github.com/vinaykashya/Model-Predictive-Controller/blob/master/imgs/download.png)
 
-  * Timestep Length and Elapsed Duration (N & dt)
+* **Timestep Length and Elapsed Duration (N & dt)**
 
   * N = 10
   * dt = 0.10 s // tested with 0.3, 0.12, 0.1, 0.08s
