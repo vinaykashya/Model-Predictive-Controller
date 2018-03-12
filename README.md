@@ -2,7 +2,29 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## OBJECTIVE
 
+This project is to use Model Predictive Control (MPC) to drive a car in the Udacity simulator. The simulator provides reference waypoints and we use MPC to compute steering and throttle commands to drive the car. The solution must be robust to 100ms latency to simulate real-world user and actuator delays. In this project, the MPC optimize the actuators (steering and throttle), simulate the vehicle trajactory, and minimize the cost like cross-track error. A max speed of 80 MPH is achieved in this project.
+
+##  MODEL
+
+* KINEMATIC MODEL
+A kinematic model is implemented to control the vehicle around the track. Kinematic models are simplifications of dynamic models that ignore tire forces, gravity, and mass. This simplification reduces the accuracy of the models, but it also makes them more tractable. The kinematic model includes the vehicle's x and y coordinates, orientation angle (psi), and velocity, as well as the cross-track error and psi error (epsi). Actuator outputs are acceleration and delta (steering angle). The model combines the state and actuations from the previous timestep to calculate the state for the current timestep.
+
+* States:
+ * x: cars x position
+ * y: cars y position
+ * ψ (psi): vehicle's angle in radians from the x-direction (radians)
+ * ν: vehicle's velocity
+ * cte: cross track error
+ * eψ : orientation error
+
+* Actuator values
+ * δ (delta): steering angle
+ * a : acceleration (including throttle and break)
+
+
+---
 ## Dependencies
 
 * cmake >= 3.5
