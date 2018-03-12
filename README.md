@@ -8,23 +8,42 @@ This project is to use Model Predictive Control (MPC) to drive a car in the Udac
 
 ##  MODEL
 
-* KINEMATIC MODEL
-A kinematic model is implemented to control the vehicle around the track. Kinematic models are simplifications of dynamic models that ignore tire forces, gravity, and mass. This simplification reduces the accuracy of the models, but it also makes them more tractable. The kinematic model includes the vehicle's x and y coordinates, orientation angle (psi), and velocity, as well as the cross-track error and psi error (epsi). Actuator outputs are acceleration and delta (steering angle). The model combines the state and actuations from the previous timestep to calculate the state for the current timestep.
+* **KINEMATIC MODEL**
+  A kinematic model is implemented to control the vehicle around the track. Kinematic models are simplifications of dynamic models that ignore tire forces, gravity, and mass. This simplification reduces the accuracy of the models, but it also makes them more tractable. The kinematic model includes the vehicle's x and y coordinates, orientation angle (psi), and velocity, as well as the cross-track error and psi error (epsi). Actuator outputs are acceleration and delta (steering angle). The model combines the state and actuations from the previous timestep to calculate the state for the current timestep.
 
-* States:
-  * x: cars x position
-  * y: cars y position
-  * ψ (psi): vehicle's angle in radians from the x-direction (radians)
-  * ν: vehicle's velocity
-  * cte: cross track error
-  * eψ : orientation error
+  * States:
+		* x: cars x position
+      	* y: cars y position
+      	* ψ (psi): vehicle's angle in radians from the x-direction (radians)
+      	* ν: vehicle's velocity
+      	* cte: cross track error
+      	* eψ : orientation error
 
-* Actuator values
-  * δ (delta): steering angle
-  * a : acceleration (including throttle and break)
+  * Actuator values
+  		* δ (delta): steering angle
+  		* a : acceleration (including throttle and break)
 
-*The kinematic model can predict the state on the next time step by taking into account the current state and actuators as follows:
- ![imgs/download](https://github.com/vinaykashya/Model-Predictive-Controller/blob/master/imgs/download.png)
+  * The kinematic model can predict the state on the next time step by taking into account the current state and actuators as follows:
+   ![imgs/download](https://github.com/vinaykashya/Model-Predictive-Controller/blob/master/imgs/download.png)
+
+* Timestep Length and Elapsed Duration (N & dt)
+
+  * N = 10
+  * dt = 0.10 s // tested with 0.3, 0.12, 0.1, 0.08s
+
+   The prediction horizon T is the duration over which future predictions are made. T is the product of N and dt, T = N * dt. T is usually a few seconds, at most. Beyond that horizon, the environment will change enough that it won't make sense to predict any further into the future. N and dt are parameters to be tuned for each model predictive controller. However, there are some general guidelines: T should be as large as possible, while dt should be as small as possible. These guidelines create tradeoffs.
+
+   These following dt has been tested 0.3, 0.12, 0.1, 0.08, and I found that the dt should be closer to the latency in order to make the MPC work. So, dt = 0.10 was selected.
+
+   The goal of Model Predictive Control is to optimize the control inputs: [δ,a]. An optimizer will tune these inputs until a low cost vector of control inputs is found.
+
+* **Polynomial Fitting and MPC Preprocessing**
+
+   Since the reference waypoints are given in the map global coordinates, they were converted into the car's coordinate and then a 3rd order polynomial is fitted to waypoints. Actual state of the vehicle was "shifted" into the future by 100 ms latency. It helps to reduce negative effects of the latency and increase stability of the controller. The cost function parameters were tuned by try-and-error method.
+
+* **Model Predictive Control with Latency**
+
+   The latency was introduced to simulate real delay of a human driver or physical actuators in case of a self driving car. The original kinematic equations depend upon the actuations from the previous timestep, but with a delay of 100ms (which happens to be the timestep interval) the actuations are applied another timestep later, so the equations have been altered to account for this.
 
 
 ---
@@ -66,11 +85,11 @@ A kinematic model is implemented to control the vehicle around the track. Kinema
 ## Tips
 
 1. It's recommended to test the MPC on basic examples to see if your implementation behaves as desired. One possible example
-is the vehicle starting offset of a straight line (reference). If the MPC implementation is correct, after some number of timesteps
-(not too many) it should find and track the reference line.
+  is the vehicle starting offset of a straight line (reference). If the MPC implementation is correct, after some number of timesteps
+  (not too many) it should find and track the reference line.
 2. The `lake_track_waypoints.csv` file has the waypoints of the lake track. You could use this to fit polynomials and points and see of how well your model tracks curve. NOTE: This file might be not completely in sync with the simulator so your solution should NOT depend on it.
 3. For visualization this C++ [matplotlib wrapper](https://github.com/lava/matplotlib-cpp) could be helpful.)
-4.  Tips for setting up your environment are available [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
+4. Tips for setting up your environment are available [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
 5. **VM Latency:** Some students have reported differences in behavior using VM's ostensibly a result of latency.  Please let us know if issues arise as a result of a VM environment.
 
 ## Editor Settings
