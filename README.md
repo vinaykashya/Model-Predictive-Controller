@@ -24,7 +24,7 @@ This project is to use Model Predictive Control (MPC) to drive a car in the Udac
   	* a : acceleration (including throttle and break)
 
   * The kinematic model can predict the state on the next time step by taking into account the current state and actuators:
-   ![imgs/download](https://github.com/vinaykashya/Model-Predictive-Controller/blob/master/imgs/download.png)
+		![imgs/download](https://github.com/vinaykashya/Model-Predictive-Controller/blob/master/imgs/download.png)
 
 * Timestep Length and Elapsed Duration (N & dt)
 
